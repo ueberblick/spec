@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.ueberblick.docs</groupId>
+  <artifactId>specs</artifactId>
+  <version>0.1</version>
+  <packaging>pom</packaging>
+
+  <name>specs</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <asciidoctorVersion>1.5.0</asciidoctorVersion>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <asciidoc.source.directory>${basedir}/src/asciidoc</asciidoc.source.directory>
+    <asciidoc.output.directory>${basedir}/target/generated-docs</asciidoc.output.directory>
+    <asciidoc.images.directory>images</asciidoc.images.directory>
+  </properties>
+  <build>
+    <plugins>
+      <!-- we need this to copy the images to the generated-docs output directory,
+      otherwise images would not be part of the generated-docs -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${asciidoc.output.directory}/${asciidoc.images.directory}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${asciidoc.source.directory}/${asciidoc.images.directory}</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>output-html</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <configuration>
+              <sourceHighlighter>prettify</sourceHighlighter>
+              <backend>html5</backend>
+              <doctype>book</doctype>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <headerFooter>true</headerFooter>
+          <sourceDirectory>${asciidoc.source.directory}</sourceDirectory>
+          <outputDirectory>${asciidoc.output.directory}</outputDirectory>
+          <imagesDir>images</imagesDir>
+          <attributes>
+            <opennms-version>${project.version}</opennms-version>
+          </attributes>
+        </configuration>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>package</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <skipAssembly>true</skipAssembly>
+            <descriptors>
+              <descriptor>${basedir}/../src/assembly/doc.xml</descriptor>
+            </descriptors>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>
