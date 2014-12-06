@@ -1,7 +1,7 @@
 = Specification Überlick
 
 .Generic data collection infrastructure
-image::images/spec.png[]
+image::spec.png[]
 
 Describe
 
