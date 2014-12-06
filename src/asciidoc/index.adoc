@@ -1,2 +1,12 @@
-= Hello World!
-This is my world - Go away
+= Specification Überlick
+
+.Generic data collection infrastructure
+image::images/spec.png[]
+
+Describe
+
+* Überblick
+* Management Client
+* Überblick Probe
+* Management Agent
+* Sensors
